@@ -3,7 +3,7 @@ IFEs were first discovered within the Venusian orbit and were believed to be gen
 
 The rotation of the sun twists the magnetic field into an Archimedean spiral given as:
 
-(r - r_0) = -(v/w)(\theta - \theta_0)
+(r - r_0) = -(v/w)($\theta$ - $\theta$_0)
 
 # DUST THEORY
 Dust is produced via numerous collisions with asteroids and comets, which gets photoionized rapidly. Charged particles mass-load the incident magnetic field, create a pile-up (increasing |B|). The resulting bend of the magnetic field around the obstacle generates a force that accelerates the dust cloud away from the sun.
