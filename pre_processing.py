@@ -3,6 +3,8 @@
 
 # Date: March 2019
 ###########################################################################
+import os
+from datetime import datetime
 
 if __name__ == '__main__':
 	start_time = datetime.now()
@@ -11,16 +13,16 @@ if __name__ == '__main__':
 	# file run: 
 	parser = argparse.ArgumentParser(description="flag format given as: -F <tsv_file>")
 	parser.add_argument('-F', '-dust_file', help="dust file for pre-processing")
-	parser.add_argument('-P', '-verbose_sentences', choices=("True", "False"), default="False", help="print sentences with brackets")
+	parser.add_argument('-P', '-verbose_sentences', choices=("True", "False"), default="False", help="print sentences")
 	args = parser.parse_args()
 	if args.F is None:
 		print("ERROR: Include a file to read\n")
 		exit()
 	else:
-		dust_file = args.G
+		dust_file = args.F
 
-	print_brackets = args.P
-	print_brackets = True if args.P == 'True' else False # cast as true/false from input string
+	to_print = args.P
+	to_print = True if args.P == 'True' else False # cast as true/false from input string
 
 	# creating directories if they do not already exist
 	if not os.path.isdir('csv_features'):
