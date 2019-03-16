@@ -5,5 +5,7 @@ The rotation of the sun twists the magnetic field into an Archimedean spiral giv
 
 (r - r_0) = -(v/w)($\theta$ - $\theta$_0)
 
+where r = position of spacecraft, r_0 = position of dust source, v = velocity of dust cloud, w = angular speed of sun, $theta$ = angular position of spacecraft, and $theta$sub{0} = angular position of dust source. 
+
 # DUST THEORY
 Dust is produced via numerous collisions with asteroids and comets, which gets photoionized rapidly. Charged particles mass-load the incident magnetic field, create a pile-up (increasing |B|). The resulting bend of the magnetic field around the obstacle generates a force that accelerates the dust cloud away from the sun.
