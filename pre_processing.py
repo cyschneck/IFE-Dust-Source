@@ -1,6 +1,6 @@
 ########################################################################################################################################
 # Dust and IFE interactions
-# Objective: This code will identify candidate sources of dust from small bodies (asteroids, comets) for previously identified IFEs. 
+# Objective: PRE-PROCESSING OF SMALL BODIES DATABASE DATA TYPES FOR FUTURE IDENTIFICATION
 # Date: March 2019
 ########################################################################################################################################
 import os
