@@ -12,7 +12,7 @@ Dust is produced via numerous collisions with asteroids and comets, which gets p
 
 ## Overview of Code
 
-# neo_asteroid_features.csv will contain all the information for each asteroid (diameter, inclination, etc.) 
+neo_asteroid_features.csv will contain all the information for each asteroid (diameter, inclination, etc.) 
 
 **NASA API Details**
 
