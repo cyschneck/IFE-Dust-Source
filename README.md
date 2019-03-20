@@ -9,7 +9,10 @@ A strong candidate dust source will be a small body that has an orbit inclinatio
 ## Dust Theory
 Dust is produced via numerous collisions with asteroids and comets, which gets photoionized rapidly. Charged particles mass-load the incident magnetic field, create a pile-up (increasing |B|). The resulting bend of the magnetic field around the obstacle generates a force that accelerates the dust cloud away from the sun. This disturbance is seen as an IFE.
 
+
 ## Overview of Code
+
+# neo_asteroid_features.csv will contain all the information for each asteroid (diameter, inclination, etc.) 
 
 **NASA API Details**
 
