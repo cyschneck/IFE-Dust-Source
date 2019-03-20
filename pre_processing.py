@@ -8,10 +8,10 @@ from datetime import datetime
 import csv
 import requests
 
-## SAVE ASTERIOD TO CSV
+## API CALLS FOR NEO
 def neoApiByDate(api_key):
-	# api call: Retieve a paginated list of Near Earth Objects
-	# Parameters: Page (int) and Query Size (int)
+	# api call: Retrieve a list of Asteroids based on their closest approach date to Earth.
+	# Parameters: Starting date for asteroid search (YYYY-MM-DD), Ending date for asteroid search (YYYY-MM-DD)
 	''' Returns: Date, is_sentry_object, links, nasa_jpl_url, absolute_magnitude_h, 
 		estimated_diameter (max, min): feet, miles, meters, kilometers,
 		close_approach_data (list): miss distance (astronmical, miles, lunar, kilometers),
@@ -71,17 +71,20 @@ def neoApiByID(api_key, asteriod_id):
 			print(v)
 			print("\n")
 
+## SAVE DATA TO CSV
 def saveNEOData(api_data):
 	# save data from api call to csv"
 	csv_filename = 'neo_asteriod_api.csv'
 	with open(csv_filename, mode='w') as csv_file:
-		api_fields = ["neo_reference_id",
-						"name",
+		api_fields = ["name",
+						"neo_reference_id",
 						"designation",
 						"absolute_magnitude_h",
 						"estimated_diameter km (max)",
 						"estimated_diameter km (min)",
-						"orbiting_body"]
+						"orbiting_body",
+						"last_observation_date",
+						"inclination"]
 						
 		writer = csv.DictWriter(csv_file, fieldnames=api_fields)
 		writer.writeheader()
