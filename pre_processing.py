@@ -9,18 +9,35 @@ import csv
 import requests
 
 ## SAVE ASTERIOD TO CSV
-def neoApiBrowseAll(api_key):
+def neoApiByDate(api_key):
 	# api call: Retieve a paginated list of Near Earth Objects
 	# Parameters: Page (int) and Query Size (int)
-	http_link = "https://api.nasa.gov/neo/rest/v1/neo/browse?api_key={0}".format(api_key)
-	api_data = requests.get(http_link)
+	http_link_by_date = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2015-09-07&end_date=2015-09-07&api_key={0}".format(api_key)
+	api_data = requests.get(http_link_by_date)
 	print("status code = {0}".format(api_data.status_code))
-	if api_data.status_code == 200:
-		print("found")
-		print(api_data.content)
+
 	if api_data.status_code != 200:
 		# 401 (Unauthorized), 402 (Forbidden), 404 (Not Found)
 		print("not found")
+
+	if api_data.status_code == 200:
+		print("found")
+		print("api data encoding: {0}".format(api_data.encoding))
+		api_neo_lst = api_data.json()["near_earth_objects"]
+		for date, neo_data_lst in api_neo_lst.iteritems():
+			print(date)
+			for neo_data_dict in neo_data_lst:
+				print("NEW OBJECT")
+				for k, v in neo_data_dict.iteritems():
+					print(k)
+					print("\t{0}".format(v))
+					print("\n")
+			print("\n")
+
+def neoApiByID(api_key, asteriod_id):
+	# Lookup a specific Asteroid based on its NASA JPL small body (SPK-ID) ID
+	# Parameters: Asteroid (str)
+	http_link_by_id = "https://api.nasa.gov/neo/rest/v1/neo/{0}?api_key={1}".format(asteriod_id, api_key)
 
 def saveNEOData(api_data):
 	# save data from api call to csv"
@@ -66,7 +83,7 @@ if __name__ == '__main__':
 	# error condition: https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=433%eros
 
 	print("\n")
-	neoApiBrowseAll(api_key)
+	neoApiByDate(api_key)
 	saveNEOData("")
 
 	print("\nran for for {0}\n".format(datetime.now() - start_time))
