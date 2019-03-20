@@ -17,3 +17,11 @@ Dust is produced via numerous collisions with asteroids and comets, which gets p
 "NASA NeoWS API") is a RESTful web service for near earth Asteroid information. With NeoWs a user can: search for Asteroids based on their closest approach date to Earth, lookup a specific Asteroid with its NASA JPL small body id, as well as browse the overall data-set.
 
 Data-set: All the data is from the [NASA JPL Asteroid team](http://neo.jpl.nasa.gov/ "Neo JPL Full Dataset in Online Format")"
+
+**Run Code**
+
+`
+python pre_processing.py -A DEMO_KEY
+`
+
+Parameters: -A [(API_KEY)](https://api.nasa.gov/index.html#apply-for-an-api-key "Get NASA API Key, but a test run works with 'DEMO_KEY'")
