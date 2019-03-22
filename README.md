@@ -13,7 +13,7 @@ We will first identify possible dust sources for each event and then compare sub
 
 We will consider a small phase difference as anything less than 20 degrees approaching and retreating. We will consider the orbital inclination to be close from an average radial size of IFEs in the XY plane (GSE).
 
-![Oljato Orbit](oljato_orbit.png)
+Subsequent statistically analysis will be performed through the entire orbit of promising dust source candidates on how the frequency of IFEs changes at different points in the body's orbit (see Russell 1987).
 
 ## Dust Theory
 Dust is produced via numerous collisions with asteroids and comets, which gets photoionized rapidly. Charged particles mass-load the incident magnetic field, create a pile-up (increasing |B|). The resulting bend of the magnetic field around the obstacle generates a force that accelerates the dust cloud away from the sun. This disturbance is seen as an IFE.
