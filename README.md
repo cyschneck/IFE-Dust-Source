@@ -5,7 +5,11 @@ IFEs were first discovered within the Venusian orbit and were believed to be gen
 
 A strong candidate dust source will be a small body that has an orbit inclination close to the XY plane (GSE) of the spacecraft and be the region around the time the IFEs were found (i.e. have a small phase difference) for multiple orbits. Because of the large gyroradius of the charged dust, the cloud will travel approximately radially from the source.
 
-We will first identify possible dust sources from year-long orbit periods and compare to longer orbit periods. A strong candidate will be considered a small body which is close (in phase and inclination) to times with IFEs and far away when IFEs do not occur (or are statistically less).
+![Inclination Criteria](acceptable_inclination_criteria.jpg)
+
+We will first identify possible dust sources for each event and then compare subsequent periods of the small bodies identified to find the percentage of the time IFEs are again seen (see below).
+
+![Steps to Identify Dust Sources](identify_dust_source_steps.jpg)
 
 We will consider a small phase difference as anything less than 20 degrees approaching and retreating. We will consider the orbital inclination to be close from an average radial size of IFEs in the XY plane (GSE).
 
@@ -16,6 +20,7 @@ Dust is produced via numerous collisions with asteroids and comets, which gets p
 
 
 ## Overview of Code
+
 
 neo_asteroid_features.csv will contain all the information for each asteroid (diameter, inclination, etc.) 
 
