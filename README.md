@@ -5,17 +5,22 @@ IFEs were first discovered within the Venusian orbit and were believed to be gen
 
 A strong candidate dust source will be a small body that has an orbit inclination close to the XY plane (GSE) of the spacecraft and be the region around the time the IFEs were found (i.e. have a small phase difference) for multiple orbits. Because of the large gyroradius of the charged dust, the cloud will travel approximately radially from the source.
 
-We will first identify possible dust sources from year-long orbit periods and compare to longer orbit periods. A strong candidate will be considered a small body which is close (in phase and inclination) to times with IFEs and far away when IFEs do not occur (or are statistically less).
+![Inclination Criteria](acceptable_inclination_criteria.JPG)
+
+We will first identify possible dust sources for each event and then compare subsequent periods of the small bodies identified to find the percentage of the time IFEs are again seen (see below).
+
+![Steps to Identify Dust Sources](identify_dust_source_steps.JPG)
 
 We will consider a small phase difference as anything less than 20 degrees approaching and retreating. We will consider the orbital inclination to be close from an average radial size of IFEs in the XY plane (GSE).
 
-![Oljato Orbit](oljato_orbit.png)
+Subsequent statistically analysis will be performed through the entire orbit of promising dust source candidates on how the frequency of IFEs changes at different points in the body's orbit (see Russell 1987).
 
 ## Dust Theory
 Dust is produced via numerous collisions with asteroids and comets, which gets photoionized rapidly. Charged particles mass-load the incident magnetic field, create a pile-up (increasing |B|). The resulting bend of the magnetic field around the obstacle generates a force that accelerates the dust cloud away from the sun. This disturbance is seen as an IFE.
 
 
 ## Overview of Code
+
 
 neo_asteroid_features.csv will contain all the information for each asteroid (diameter, inclination, etc.) 
 
