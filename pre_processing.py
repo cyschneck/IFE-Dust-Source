@@ -21,6 +21,7 @@ def neoApiByDate(api_key):
 	'''
 	http_link_by_date = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2015-09-07&end_date=2015-09-07&api_key={0}".format(api_key)
 	api_data = requests.get(http_link_by_date)
+	IsApiLimitReached(api_data, 1) # x limit = 1000/hr (check that isn't reached)
 	print("status code = {0}".format(api_data.status_code))
 
 	if api_data.status_code != 200:
@@ -30,17 +31,23 @@ def neoApiByDate(api_key):
 	if api_data.status_code == 200:
 		print("api data encoding: {0}".format(api_data.encoding))
 		api_neo_lst = api_data.json()["near_earth_objects"]
+		total_calls_to_make = len(api_neo_lst.values()[0]) # total api calls to make (check that it doesn't exceeded allowed)
+		print("Total api calls to make: {0}".format(total_calls_to_make))
 		for date, neo_data_lst in api_neo_lst.iteritems():
 			print(date)
 			for neo_data_dict in neo_data_lst:
-				print("NEW OBJECT")
-				for k, v in neo_data_dict.iteritems():
-					print(k)
-					print("\t{0}".format(v))
-					print("\n")
-				neoApiByID(api_key, neo_data_dict['neo_reference_id'])
+			#	print("NEW OBJECT")
+			#	#for k, v in neo_data_dict.iteritems():
+			#	#	print(k)
+			#	#	print("\t{0}".format(v))
+			#	#	print("\n")
+				neoApiByID(api_key, neo_data_dict['neo_reference_id'], total_calls_to_make)
 
-def neoApiByID(api_key, asteriod_id):
+	print(api_data.headers)
+	IsApiLimitReached(api_data, 0)# print api calls remaining at the end for reference
+
+
+def neoApiByID(api_key, asteriod_id, api_calls_to_make):
 	# api call: Lookup a specific Asteroid based on its NASA JPL small body (SPK-ID) ID
 	# Parameters: Asteroid ID (str)
 	'''Returns: designation, nasa_jpl_url, links, neo_reference_id, is_potentially_hazardous_asteriod,
@@ -55,6 +62,7 @@ def neoApiByID(api_key, asteriod_id):
 	'''
 	http_link_by_id = "https://api.nasa.gov/neo/rest/v1/neo/{0}?api_key={1}".format(asteriod_id, api_key)
 	api_data = requests.get(http_link_by_id)
+	IsApiLimitReached(api_data, api_calls_to_make) # x limit = 1000/hr (check that isn't reached)
 	print("status code = {0}".format(api_data.status_code))
 
 	if api_data.status_code != 200:
@@ -62,8 +70,7 @@ def neoApiByID(api_key, asteriod_id):
 		print("not found")
 
 	if api_data.status_code == 200:
-		print("api data encoding: {0}".format(api_data.encoding))
-		print("NEO BY ID")
+		print("\tNEO BY ID")
 		neo_id_dict = api_data.json()
 		for k, v in neo_id_dict.iteritems():
 			print(k)
@@ -90,6 +97,19 @@ def saveNEOData(api_data):
 
 	print("\nSAVED: {0}".format(csv_filename))
 	return csv_filename
+
+## TRACK API USAGE
+def IsApiLimitReached(api_data, calls_remaining):
+	# check that api limit isn't reached before attempting
+	# NASA API X-Ratelimit 100 api calls per hour (on a rolling basis since api was first called)
+	api_calls_remaining = api_data.headers['X-RateLimit-Remaining']
+	print("API CALLS REMAINING: {0}".format(api_calls_remaining))
+	
+	if api_calls_remaining < calls_remaining:
+		time_remaining = 60 - datetime.now().minute
+		print("API LIMIT REACHED, Wait {0} minutes before using again".format(time_remaining))
+		exit()
+	
 
 if __name__ == '__main__':
 	start_time = datetime.now()
