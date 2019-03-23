@@ -26,7 +26,8 @@ def neoApiByDate(api_key):
 
 	if api_data.status_code != 200:
 		# 401 (Unauthorized), 402 (Forbidden), 404 (Not Found)
-		print("not found")
+		print("API REQUEST NOT FOUND, exiting...")
+		exit()
 
 	if api_data.status_code == 200:
 		print("api data encoding: {0}".format(api_data.encoding))
@@ -36,14 +37,13 @@ def neoApiByDate(api_key):
 		for date, neo_data_lst in api_neo_lst.iteritems():
 			print(date)
 			for neo_data_dict in neo_data_lst:
-			#	print("NEW OBJECT")
-			#	#for k, v in neo_data_dict.iteritems():
-			#	#	print(k)
-			#	#	print("\t{0}".format(v))
-			#	#	print("\n")
+				print("NEW OBJECT")
+				for k, v in neo_data_dict.iteritems():
+					print(k)
+					print("\t{0}".format(v))
+					print("\n")
 				neoApiByID(api_key, neo_data_dict['neo_reference_id'], total_calls_to_make)
 
-	print(api_data.headers)
 	IsApiLimitReached(api_data, 0)# print api calls remaining at the end for reference
 
 
@@ -67,7 +67,8 @@ def neoApiByID(api_key, asteriod_id, api_calls_to_make):
 
 	if api_data.status_code != 200:
 		# 401 (Unauthorized), 402 (Forbidden), 404 (Not Found)
-		print("not found")
+		print("API REQUEST NOT FOUND, exiting...")
+		exit()
 
 	if api_data.status_code == 200:
 		print("\tNEO BY ID")
