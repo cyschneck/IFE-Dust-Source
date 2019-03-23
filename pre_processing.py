@@ -28,8 +28,7 @@ def neoApiByDate(api_key):
 		print("API REQUEST NOT FOUND, exiting...")
 		exit()
 
-	print("start")
-	IsApiLimitReached(api_data, 1) # x limit = 1000/hr (check that isn't reached)
+	start_limit = int(IsApiLimitReached(api_data, 1)) # x limit = 1000/hr (check that isn't reached)
 	if api_data.status_code == 200:
 		#print("api data encoding: {0}".format(api_data.encoding))
 		api_neo_lst = api_data.json()["near_earth_objects"]
@@ -52,8 +51,7 @@ def neoApiByDate(api_key):
 			print("\n")
 			pass
 
-	print("end")
-	IsApiLimitReached(api_data, 0)# print api calls remaining at the end for reference
+	print("API LIMIT REMAINING: {0}".format(start_limit - total_calls_to_make)) # print api calls remaining at the end for reference
 
 def neoApiByID(api_key, asteriod_id):
 	# api call: Lookup a specific Asteroid based on its NASA JPL small body (SPK-ID) ID
@@ -114,10 +112,10 @@ def IsApiLimitReached(api_data, api_call_request_cnt):
 	#print("{0} < {1} = {2}".format(api_calls_remaining, api_call_request_cnt, api_calls_remaining < api_call_request_cnt))
 	
 	if api_calls_remaining < api_call_request_cnt:
-		time_remaining = 60 - datetime.now().minute
-		print("API LIMIT REACHED, Cannot make {0} calls. Wait {1} minutes before using again".format(api_call_request_cnt, time_remaining))
+		print("API LIMIT REACHED, Cannot make {0} calls. Wait an hour to allow limit to fully reset".format(api_call_request_cnt))
 		exit()
 	print("API CALLS REMAINING: {0}".format(api_calls_remaining))
+	return api_calls_remaining
 
 if __name__ == '__main__':
 	start_time = datetime.now()
