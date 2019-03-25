@@ -7,7 +7,7 @@ A strong candidate dust source will be a small body that has an orbit inclinatio
 
 ![Inclination Criteria](acceptable_inclination_criteria.JPG)
 
-We will first identify possible dust sources for each event and then compare subsequent periods of the small bodies identified to find the percentage of the time IFEs are again seen (see below).
+We will first identify possible dust sources for each event and then compare subsequent periods of the small bodies identified to find the percentage of the time IFEs are again seen (see below). Note the periods that can be tested will be constrained by the on the orbital inclination of the body.
 
 ![Steps to Identify Dust Sources](identify_dust_source_steps.JPG)
 
