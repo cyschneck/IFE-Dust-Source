@@ -34,16 +34,16 @@ Data-set: All the data is from the [NASA JPL Asteroid team](http://neo.jpl.nasa.
 **Definitions of Variables**
 * e = eccentricity (no unit) describes how close the orbit is to a perfect circle (0 = circle, 0-1 = elliptical orbit, 1 = parabolic escape, >1 = hyperbola)
 * a = semi-major axis (Au) describes the long axis of the ellipitical orbit
-* q = perihelion distance (Au) describes the point in the orbit closest to the sun
 * i = inclination (degree) describes the angle with respect to the xy ecliptic plane
-* node = longitude of the ascending node (degree) describes the angle in the xy ecliptic plane from a reference longitude around the sun to the point in the orbit where the body rises through the ecliptic
 * peri = argument of perihelion (degree) describes the angle between the orbiting body's closest approach to Earth and its ascending node
-* M = mean anomaly (deg) describes the fraction of an elliptical orbit's period elapsed since passing the closest approach
 * t<sub>p</sub> =  (TDB: Barycentric Dynamical Time) describes the time when the orbiting body last passed its closest approach
-* period = sidereal orbit period (day & year) describes the time for one orbit
+Other variables (not used directly but defined by API)
 * n = mean motion (deg/day) describes the reciprocal of the period
 * Q = aphelion distance (Au) describes the point furthest from the sun in its orbit
-
+* period = sidereal orbit period (day & year) describes the time for one orbit
+* M = mean anomaly (deg) describes the fraction of an elliptical orbit's period elapsed since passing the closest approach
+* node = longitude of the ascending node (degree) describes the angle in the xy ecliptic plane from a reference longitude around the sun to the point in the orbit where the body rises through the ecliptic
+* q = perihelion distance (Au) describes the point in the orbit closest to the sun
 
 **Simplifying Assumptions**
 1. The radius of all IFEs is assumed to be the average radial size of IFEs
