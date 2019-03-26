@@ -44,7 +44,6 @@ Data-set: All the data is from the [NASA JPL Asteroid team](http://neo.jpl.nasa.
 * n = mean motion (deg/day) describes the reciprocal of the period
 * Q = aphelion distance (Au) describes the point furthest from the sun in its orbit
 
-![timing the orbit](timing_orbit.JPG)
 
 **Simplifying Assumptions**
 1. The radius of all IFEs is assumed to be the average radial size of IFEs
@@ -52,9 +51,9 @@ Data-set: All the data is from the [NASA JPL Asteroid team](http://neo.jpl.nasa.
 3. The angular velocity is averaged as $\omega$ = $\frac{v}{a}$ 
 
 **Orbital Timing**
-We are concerned with the time the orbiting body spends above/below the xy ecliptic plane. To find this we need to find the time it takes for the body to travel from perihelion (crosses at t<sub>p</sub>) to the ascending node (t<sub>A<\sub>). The time when the body is above the ecliptic plane but within the radius of the IFE is given by t<sub>N</sub>.
+We are concerned with the time the orbiting body spends above/below the xy ecliptic plane. To find this we need to find the time it takes for the body to travel from perihelion (crosses at t<sub>p</sub>) to the ascending node (t<sub>A<\sub>). The time when the body is above the ecliptic plane but within the radius of the IFE is given by t<sub>N<\sub>.
 
-
+![timing the orbit](timing_orbit.JPG)
 
 From the simplifying assumptions:
 
