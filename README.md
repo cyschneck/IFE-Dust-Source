@@ -39,7 +39,7 @@ Data-set: All the data is from the [NASA JPL Asteroid team](http://neo.jpl.nasa.
 * node = longitude of the ascending node (degree) describes the angle in the xy ecliptic plane from a reference longitude around the sun to the point in the orbit where the body rises through the ecliptic
 * peri = argument of perihelion (degree) describes the angle between the orbiting body's closest approach to Earth and its ascending node
 * M = mean anomaly (deg) describes the fraction of an elliptical orbit's period elapsed since passing the closest approach
-* t<sub>p</sub> (TDB: Barycentric Dynamical Time) describes the time when the orbiting body last passed its closest approach
+* t<sub>p</sub> =  (TDB: Barycentric Dynamical Time) describes the time when the orbiting body last passed its closest approach
 * period = sidereal orbit period (day & year) describes the time for one orbit
 * n = mean motion (deg/day) describes the reciprocal of the period
 * Q = aphelion distance (Au) describes the point furthest from the sun in its orbit
