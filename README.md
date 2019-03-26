@@ -44,6 +44,12 @@ Data-set: All the data is from the [NASA JPL Asteroid team](http://neo.jpl.nasa.
 * n = mean motion (deg/day) describes the reciprocal of the period
 * Q = aphelion distance (Au) describes the point furthest from the sun in its orbit
 
+
+**Simplifying Assumptions**
+1. The radius of all IFEs is assumed to be the average radial size of IFEs
+2. The velocity of the orbit is truncated as to e<sup>4</sup> factor
+3. The angular velocity is averaged as \omega = \frac{v}{a} 
+
 **Run Code**
 
 `
