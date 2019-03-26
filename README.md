@@ -58,7 +58,7 @@ We are concerned with the time the orbiting body spends above/below the xy eclip
 From the simplifying assumptions:
 
 1. t<sub>A</sub> = (peri)(a)/v
-2. t<sub>N</sub> = r/vsin(i)
+2. t<sub>N</sub> = ra/vsin(i)
 3. v = (2\Pia)/T(1 - e<sup>2</sup>/4 - (3/64)e<sup>4</sup>
 
 **Run Code**
