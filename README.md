@@ -62,6 +62,15 @@ From the simplifying assumptions:
 2. t<sub>N</sub> = ra/vsin(i)
 3. v = (2\Pia)/T(1 - e<sup>2</sup>/4 - (3/64)e<sup>4</sup>
 
+So the time periods of interest are given by:
+
+1. t<sub>1</sub> = $/alpha$ t<sub>p</sub> + (t<sub>A</sub> - t<sub>N</sub>)
+2. t<sub>2</sub> = $/alpha$ t<sub>p</sub> + (t<sub>A</sub> + t<sub>N</sub>)
+3. t<sub>3</sub> = $/alpha$ t<sub>p</sub> - (t<sub>A</sub> - t<sub>N</sub>)
+4. t<sub>4</sub> = $/alpha$ t<sub>p</sub> - (t<sub>A</sub> + t<sub>N</sub>)
+
+where $/alpha$ is the number of years passed.
+
 **Run Code**
 
 `
