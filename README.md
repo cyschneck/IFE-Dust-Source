@@ -31,7 +31,7 @@ neo_asteroid_features.csv will contain all the information for each asteroid (di
 
 Data-set: All the data is from the [NASA JPL Asteroid team](http://neo.jpl.nasa.gov/ "Neo JPL Full Dataset in Online Format")"
 
-#Definitions of Variables
+**Definitions of Variables**
 * e = eccentricity (no unit) describes how close the orbit is to a perfect circle (0 = circle, 0-1 = elliptical orbit, 1 = parabolic escape, >1 = hyperbola)
 * a = semi-major axis (Au) describes the long axis of the ellipitical orbit
 * q = perihelion distance (Au) describes the point in the orbit closest to the sun
