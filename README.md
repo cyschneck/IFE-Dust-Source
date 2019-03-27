@@ -47,8 +47,7 @@ Other variables (not used directly but defined by API)
 
 **Simplifying Assumptions**
 1. The radius of all IFEs is assumed to be the average radial size of IFEs
-2. The velocity of the orbit is truncated as to e<sup>4</sup> factor
-3. The angular velocity is averaged as $\omega$ = $\frac{v}{a}$ 
+2. The velocity of the orbit (deg/day) is taken as the mean motion
 
 **Orbital Timing**
 
