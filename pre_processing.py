@@ -9,7 +9,7 @@ import csv
 import requests
 
 ## API CALLS FOR NEO
-def neoApiByDate(api_key):
+def neoApiByDate(api_key, start_date, end_date):
 	# api call: Retrieve a list of Asteroids based on their closest approach date to Earth.
 	# Parameters: Starting date for asteroid search (YYYY-MM-DD), Ending date for asteroid search (YYYY-MM-DD)
 	''' Returns: Date, is_sentry_object, links, nasa_jpl_url, absolute_magnitude_h, 
@@ -19,8 +19,9 @@ def neoApiByDate(api_key):
 		epoch_date_close_approach, close_approach_date, relative_velocity (km/s, mph, km/hr),
 		neo-reference_id, is_potentially_hazardous_asteriod, id, name
 	'''
-	http_link_by_date = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2018-08-09&end_date=2018-08-09&api_key={0}".format(api_key)
+	http_link_by_date = "https://api.nasa.gov/neo/rest/v1/feed?start_date={0}&end_date={1}&api_key={2}".format(start_date, end_date, api_key)
 	api_data = requests.get(http_link_by_date)
+	print("Date Range: {0} - {1}".format(start_date, end_date))
 	print("status code by date = {0}".format(api_data.status_code))
 
 	if api_data.status_code != 200:
@@ -40,6 +41,7 @@ def neoApiByDate(api_key):
 		print("Total api calls to make = {0}".format(total_calls_to_make))
 		IsApiLimitReached(api_data, total_calls_to_make)
 
+		neo_data_by_id = {}
 		for date, neo_data_lst in api_neo_lst.iteritems():
 			for neo_data_dict in neo_data_lst:
 				#print("NEW OBJECT")
@@ -47,11 +49,12 @@ def neoApiByDate(api_key):
 				#	print(k)
 				#	print("\t{0}".format(v))
 				#	print("\n")
-				neoApiByID(api_key, neo_data_dict['neo_reference_id'])
+				neo_data_by_id[neo_data_dict['neo_reference_id']] = neoApiByID(api_key, neo_data_dict['neo_reference_id'])
 			print("\n")
 			pass
 
 	print("API LIMIT REMAINING: {0}".format(start_limit - total_calls_to_make)) # print api calls remaining at the end for reference
+	return neo_data_by_id
 
 def neoApiByID(api_key, asteriod_id):
 	# api call: Lookup a specific Asteroid based on its NASA JPL small body (SPK-ID) ID
@@ -76,32 +79,13 @@ def neoApiByID(api_key, asteriod_id):
 		exit()
 
 	if api_data.status_code == 200:
-		print("\tNEO BY ID")
+		print("\tNEO BY ID = {0}".format(asteriod_id))
 		neo_id_dict = api_data.json()
 		#for k, v in neo_id_dict.iteritems():
 		#	print(k)
 		#	print(v)
 		#	print("\n")
-
-## SAVE DATA TO CSV
-def saveNEOData(api_data):
-	# save data from api call to csv"
-	#eccentricity, Semi-major axis, inclination,  perihelion argument, perihelion time
-	csv_filename = 'neo_asteriod_features.csv'
-	with open(csv_filename, mode='w') as csv_file:
-		api_fields = ["name",
-						"neo_reference_id",
-						"designation",
-						"eccentricity",
-						"Semi-major axis",
-						"inclination",
-						"perihelion argument",
-						"perihelion time"]
-		writer = csv.DictWriter(csv_file, fieldnames=api_fields)
-		writer.writeheader()
-
-	print("\nSAVED: {0}".format(csv_filename))
-	return csv_filename
+	return neo_id_dict
 
 ## TRACK API USAGE
 def IsApiLimitReached(api_data, api_call_request_cnt):
@@ -116,6 +100,35 @@ def IsApiLimitReached(api_data, api_call_request_cnt):
 	print("API CALLS REMAINING: {0}".format(api_calls_remaining))
 	return api_calls_remaining
 
+## SAVE DATA TO CSV
+def saveNEOData(api_asteriod_id_dict, start_date, end_date):
+	# save data from api call to csv"
+	#eccentricity, Semi-major axis, inclination,  perihelion argument, perihelion time
+	csv_filename = 'neo_asteriod_features_from_{0}_to_{1}.csv'.format(start_date.replace('-', '_'), end_date.replace('-', '_'))
+	with open(csv_filename, mode='w') as csv_file:
+		api_fields = ["Name",
+						"neo_reference_id",
+						"Eccentricity",
+						"Semi-Major Axis",
+						"Inclination",
+						"Perihelion Argument",
+						"Perihelion Time"]
+		writer = csv.DictWriter(csv_file, fieldnames=api_fields)
+		writer.writeheader()
+		
+		for asteriod_id, asteriod_data_dict in api_asteriod_id_dict.iteritems():
+			writer.writerow({'Name': asteriod_data_dict['name'].strip('()'), # remove parentheses around name
+							'neo_reference_id': asteriod_data_dict['id'],
+							'Eccentricity': asteriod_data_dict['orbital_data']['eccentricity'],
+							'Semi-Major Axis': asteriod_data_dict['orbital_data']['semi_major_axis'],
+							'Inclination': asteriod_data_dict['orbital_data']['inclination'],
+							'Perihelion Argument': asteriod_data_dict['orbital_data']['perihelion_argument'],
+							'Perihelion Time': asteriod_data_dict['orbital_data']['perihelion_time']
+							})
+
+	print("\nSAVED: {0}".format(csv_filename))
+	return csv_filename
+
 if __name__ == '__main__':
 	start_time = datetime.now()
 
@@ -123,7 +136,7 @@ if __name__ == '__main__':
 	# file run: python pre_processing.py -A DEMO_KEY
 	parser = argparse.ArgumentParser(description="flag format given as: -A <api_key>")
 	parser.add_argument('-A', '-api-key', help="api key for dataset")
-	parser.add_argument('-P', '-verbose_sentences', choices=("True", "False"), default="False", help="print sentences")
+	#parser.add_argument('-P', '-verbose_sentences', choices=("True", "False"), default="False", help="print sentences")
 	args = parser.parse_args()
 	if args.A is None:
 		print("ERROR: Include api key to read\n")
@@ -131,13 +144,14 @@ if __name__ == '__main__':
 	else:
 		api_key = args.A
 
-	to_print = args.P
-	to_print = True if args.P == 'True' else False # cast as true/false from input string
+	#to_print = args.P
+	#to_print = True if args.P == 'True' else False # cast as true/false from input string
 
 	print("\n")
-	neoApiByDate(api_key)
-	saveNEOData("")
+	start_date = '2018-08-10'
+	end_date = '2018-08-10'
+	asteriod_id_data_dict = neoApiByDate(api_key, start_date, end_date) # returns the neo by id
 
-	# TODO: handle error condition: https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=433%eros
+	saveNEOData(asteriod_id_data_dict, start_date, end_date) # save neo asteriod data to csv
 
 	print("\nran for for {0}\n".format(datetime.now() - start_time))
