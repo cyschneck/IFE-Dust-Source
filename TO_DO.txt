@@ -1,0 +1,1 @@
+1. Convert the orbital dynamics of the small body into GSE to compare with the position of low-Earth orbit satellites detecting IFEs

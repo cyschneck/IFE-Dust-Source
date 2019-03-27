@@ -37,7 +37,6 @@ Data-set: All the data is from the [NASA JPL Asteroid team](http://neo.jpl.nasa.
 * i = inclination (degree) describes the angle with respect to the xy ecliptic plane
 * peri = argument of perihelion (degree) describes the angle between the orbiting body's closest approach to Earth and its ascending node
 * t<sub>p</sub> =  (TDB: Barycentric Dynamical Time) describes the time when the orbiting body last passed its closest approach
-Other variables (not used directly but defined by API)
 * n = mean motion (deg/day) describes the reciprocal of the period
 * Q = aphelion distance (Au) describes the point furthest from the sun in its orbit
 * period = sidereal orbit period (day & year) describes the time for one orbit
@@ -47,7 +46,7 @@ Other variables (not used directly but defined by API)
 
 **Simplifying Assumptions**
 1. The radius of all IFEs is assumed to be the average radial size of IFEs
-2. The velocity of the orbit (deg/day) is taken as the mean motion
+2. The velocity of the entire orbit (deg/day) is taken as the mean motion 
 
 **Orbital Timing**
 
