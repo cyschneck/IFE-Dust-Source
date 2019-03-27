@@ -19,7 +19,7 @@ def neoApiByDate(api_key):
 		epoch_date_close_approach, close_approach_date, relative_velocity (km/s, mph, km/hr),
 		neo-reference_id, is_potentially_hazardous_asteriod, id, name
 	'''
-	http_link_by_date = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2015-09-07&end_date=2015-09-08&api_key={0}".format(api_key)
+	http_link_by_date = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2018-08-09&end_date=2018-08-09&api_key={0}".format(api_key)
 	api_data = requests.get(http_link_by_date)
 	print("status code by date = {0}".format(api_data.status_code))
 
@@ -42,11 +42,11 @@ def neoApiByDate(api_key):
 
 		for date, neo_data_lst in api_neo_lst.iteritems():
 			for neo_data_dict in neo_data_lst:
-			#	#print("NEW OBJECT")
-			#	#for k, v in neo_data_dict.iteritems():
-			#	#	print(k)
-			#	#	print("\t{0}".format(v))
-			#	#	print("\n")
+				#print("NEW OBJECT")
+				#for k, v in neo_data_dict.iteritems():
+				#	print(k)
+				#	print("\t{0}".format(v))
+				#	print("\n")
 				neoApiByID(api_key, neo_data_dict['neo_reference_id'])
 			print("\n")
 			pass
@@ -86,18 +86,17 @@ def neoApiByID(api_key, asteriod_id):
 ## SAVE DATA TO CSV
 def saveNEOData(api_data):
 	# save data from api call to csv"
+	#eccentricity, Semi-major axis, inclination,  perihelion argument, perihelion time
 	csv_filename = 'neo_asteriod_features.csv'
 	with open(csv_filename, mode='w') as csv_file:
 		api_fields = ["name",
 						"neo_reference_id",
 						"designation",
-						"absolute_magnitude_h",
-						"estimated_diameter km (max)",
-						"estimated_diameter km (min)",
-						"orbiting_body",
-						"last_observation_date",
-						"inclination"]
-						
+						"eccentricity",
+						"Semi-major axis",
+						"inclination",
+						"perihelion argument",
+						"perihelion time"]
 		writer = csv.DictWriter(csv_file, fieldnames=api_fields)
 		writer.writeheader()
 
@@ -122,7 +121,7 @@ if __name__ == '__main__':
 
 	import argparse
 	# file run: python pre_processing.py -A DEMO_KEY
-	parser = argparse.ArgumentParser(description="flag format given as: -F <tsv_file>")
+	parser = argparse.ArgumentParser(description="flag format given as: -A <api_key>")
 	parser.add_argument('-A', '-api-key', help="api key for dataset")
 	parser.add_argument('-P', '-verbose_sentences', choices=("True", "False"), default="False", help="print sentences")
 	args = parser.parse_args()
