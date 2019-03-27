@@ -43,6 +43,7 @@ def neoApiByDate(api_key, start_date, end_date):
 
 		neo_data_by_id = {}
 		for date, neo_data_lst in api_neo_lst.iteritems():
+			print(date)
 			for neo_data_dict in neo_data_lst:
 				#print("NEW OBJECT")
 				#for k, v in neo_data_dict.iteritems():
@@ -107,6 +108,7 @@ def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 	csv_filename = 'neo_asteriod_features_from_{0}_to_{1}.csv'.format(start_date.replace('-', '_'), end_date.replace('-', '_'))
 	with open(csv_filename, mode='w') as csv_file:
 		api_fields = ["Name",
+						'Designation',
 						"neo_reference_id",
 						"Eccentricity",
 						"Semi-Major Axis",
@@ -117,7 +119,8 @@ def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 		writer.writeheader()
 		
 		for asteriod_id, asteriod_data_dict in api_asteriod_id_dict.iteritems():
-			writer.writerow({'Name': asteriod_data_dict['name'].strip('()'), # remove parentheses around name
+			writer.writerow({'Name': asteriod_data_dict['name'], #.strip('()'), # remove parentheses around name
+							'Designation': asteriod_data_dict['designation'],
 							'neo_reference_id': asteriod_data_dict['id'],
 							'Eccentricity': asteriod_data_dict['orbital_data']['eccentricity'],
 							'Semi-Major Axis': asteriod_data_dict['orbital_data']['semi_major_axis'],
@@ -149,7 +152,7 @@ if __name__ == '__main__':
 
 	print("\n")
 	start_date = '2018-08-10'
-	end_date = '2018-08-10'
+	end_date = '2018-08-12'
 	asteriod_id_data_dict = neoApiByDate(api_key, start_date, end_date) # returns the neo by id
 
 	saveNEOData(asteriod_id_data_dict, start_date, end_date) # save neo asteriod data to csv
