@@ -151,8 +151,8 @@ if __name__ == '__main__':
 	#to_print = True if args.P == 'True' else False # cast as true/false from input string
 
 	print("\n")
-	start_date = '2018-08-08'
-	end_date = '2018-08-10'
+	start_date = '2018-08-07'
+	end_date = '2018-08-09'
 	asteriod_id_data_dict = neoApiByDate(api_key, start_date, end_date) # returns the neo by id
 
 	saveNEOData(asteriod_id_data_dict, start_date, end_date) # save neo asteriod data to csv
