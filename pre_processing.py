@@ -106,7 +106,7 @@ def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 	# save data from api call to csv"
 	#eccentricity, Semi-major axis, inclination,  perihelion argument, perihelion time
 	csv_filename = 'neo_asteriod_features_from_{0}_to_{1}.csv'.format(start_date.replace('-', '_'), end_date.replace('-', '_'))
-	with open(csv_filename, mode='w') as csv_file:
+	with open("{0}/{1}".format("csv_neo_features", csv_filename), mode='w') as csv_file:
 		api_fields = ["Name",
 						'Designation',
 						"neo_reference_id",
@@ -114,10 +114,15 @@ def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 						"Semi-Major Axis",
 						"Inclination",
 						"Perihelion Argument",
-						"Perihelion Time"]
+						"Perihelion Time",
+						"Perihelion Distance",
+						"Alphelion Distance",
+						'Orbiting Body for Close-Approach',
+						]
+
 		writer = csv.DictWriter(csv_file, fieldnames=api_fields)
 		writer.writeheader()
-		
+
 		for asteriod_id, asteriod_data_dict in api_asteriod_id_dict.iteritems():
 			writer.writerow({'Name': asteriod_data_dict['name'], #.strip('()'), # remove parentheses around name
 							'Designation': asteriod_data_dict['designation'],
@@ -126,7 +131,10 @@ def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 							'Semi-Major Axis': asteriod_data_dict['orbital_data']['semi_major_axis'],
 							'Inclination': asteriod_data_dict['orbital_data']['inclination'],
 							'Perihelion Argument': asteriod_data_dict['orbital_data']['perihelion_argument'],
-							'Perihelion Time': asteriod_data_dict['orbital_data']['perihelion_time']
+							'Perihelion Distance': asteriod_data_dict['orbital_data']['perihelion_distance'],
+							'Perihelion Time': asteriod_data_dict['orbital_data']['perihelion_time'],
+							'Alphelion Distance': asteriod_data_dict['orbital_data']['aphelion_distance'],
+							#'orbiting_body': asteriod_data_dict['orbital_data']['orbiting_body'],
 							})
 
 	print("\nSAVED: {0}".format(csv_filename))
@@ -146,13 +154,20 @@ if __name__ == '__main__':
 		exit()
 	else:
 		api_key = args.A
+		
 
 	#to_print = args.P
 	#to_print = True if args.P == 'True' else False # cast as true/false from input string
 
+	# creating directories if they do not already exist
+	if not os.path.isdir('csv_neo_features'):
+		print("creating csv_neo_features directory")
+		os.makedirs('csv_neo_features')
+
 	print("\n")
-	start_date = '2018-08-07'
-	end_date = '2018-08-09'
+	#try june 19-21 of 1983
+	start_date = '1983-06-19'
+	end_date = '1983-06-21'
 	asteriod_id_data_dict = neoApiByDate(api_key, start_date, end_date) # returns the neo by id
 
 	saveNEOData(asteriod_id_data_dict, start_date, end_date) # save neo asteriod data to csv

@@ -22,7 +22,7 @@ Dust is produced via numerous collisions with asteroids and comets, which gets p
 ## Overview of Code
 
 
-neo_asteroid_features_from_date_to_date.csv will contain all the information for each asteroid (diameter, inclination, etc.) 
+neo_asteroid_features_from_date_to_date.csv will contain all the information for each asteroid (diameter, inclination, etc.)
 
 **NASA API Details**
 
@@ -49,7 +49,7 @@ IFEs have a short time before they have been accelerated up to solar wind veloci
 
 **Simplifying Assumptions**
 1. The radius of all IFEs is assumed to be the average radial size of IFEs
-2. All relevant small bodies are listed in the NASA Small Body JPL collection 
+2. All relevant small bodies are listed in the NASA Small Body JPL collection
 
 **Orbital Timing**
 
@@ -64,3 +64,7 @@ python pre_processing.py -A DEMO_KEY
 `
 
 Parameters: -A [(API_KEY)](https://api.nasa.gov/index.html#apply-for-an-api-key "Get NASA API Key") (Note: Can use 'DEMO_KEY' for a test run)
+
+## TODO
+1. Convert the orbital dynamics of the small body into GSE to compare with the position of low-Earth orbit satellites detecting IFEs
+2. within 1/10 AU from source
