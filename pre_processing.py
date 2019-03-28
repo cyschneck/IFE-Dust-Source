@@ -117,9 +117,9 @@ def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 						"Perihelion Time",
 						"Perihelion Distance",
 						"Alphelion Distance",
-						'Orbiting Body for Close-Approach',
 						'Close-Approach Date',
 						'Nominal Miss Distance (AU)',
+						'Orbiting Body for Close-Approach',
 						]
 
 		writer = csv.DictWriter(csv_file, fieldnames=api_fields)
@@ -127,20 +127,21 @@ def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 
 		for asteriod_id, asteriod_data_dict in api_asteriod_id_dict.iteritems():
 			for neo_close_approach_event in asteriod_data_dict['close_approach_data']:
-				writer.writerow({'Name': asteriod_data_dict['name'], #.strip('()'), # remove parentheses around name
-								'Designation': asteriod_data_dict['designation'],
-								'neo_reference_id': asteriod_data_dict['id'],
-								'Eccentricity': asteriod_data_dict['orbital_data']['eccentricity'],
-								'Semi-Major Axis': asteriod_data_dict['orbital_data']['semi_major_axis'],
-								'Inclination': asteriod_data_dict['orbital_data']['inclination'],
-								'Perihelion Argument': asteriod_data_dict['orbital_data']['perihelion_argument'],
-								'Perihelion Distance': asteriod_data_dict['orbital_data']['perihelion_distance'],
-								'Perihelion Time': asteriod_data_dict['orbital_data']['perihelion_time'],
-								'Alphelion Distance': asteriod_data_dict['orbital_data']['aphelion_distance'],
-								'Orbiting Body for Close-Approach': neo_close_approach_event["orbiting_body"],
-								'Close-Approach Date': neo_close_approach_event["close_approach_date"],
-								'Nominal Miss Distance (AU)': neo_close_approach_event["miss_distance"]["astronomical"],
-								})
+				if neo_close_approach_event["orbiting_body"] == "Earth": # filter on neo approaches for Earth
+					writer.writerow({'Name': asteriod_data_dict['name'],
+									'Designation': asteriod_data_dict['designation'],
+									'neo_reference_id': asteriod_data_dict['id'],
+									'Eccentricity': asteriod_data_dict['orbital_data']['eccentricity'],
+									'Semi-Major Axis': asteriod_data_dict['orbital_data']['semi_major_axis'],
+									'Inclination': asteriod_data_dict['orbital_data']['inclination'],
+									'Perihelion Argument': asteriod_data_dict['orbital_data']['perihelion_argument'],
+									'Perihelion Distance': asteriod_data_dict['orbital_data']['perihelion_distance'],
+									'Perihelion Time': asteriod_data_dict['orbital_data']['perihelion_time'],
+									'Alphelion Distance': asteriod_data_dict['orbital_data']['aphelion_distance'],
+									'Close-Approach Date': neo_close_approach_event["close_approach_date"],
+									'Nominal Miss Distance (AU)': neo_close_approach_event["miss_distance"]["astronomical"],
+									'Orbiting Body for Close-Approach': neo_close_approach_event["orbiting_body"],
+									})
 
 	print("\nSAVED: {0}".format(csv_filename))
 	return csv_filename
