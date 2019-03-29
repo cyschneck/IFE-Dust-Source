@@ -95,6 +95,12 @@ def IsApiLimitReached(api_data, api_call_request_cnt, to_print):
 	if to_print: print("API CALLS REMAINING: {0}".format(api_calls_remaining))
 	return api_calls_remaining
 
+## CONVERT TO GSE
+def convertToGSE():
+	# Convert orbital dynamics for small bodies into GSE 
+	# Compare with the position of low-Earth orbit satellites detecting IFEs
+	pass
+
 ## SAVE DATA TO CSV
 def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 	# save data from api call to csv"
@@ -113,6 +119,7 @@ def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 						"Alphelion Distance",
 						'Close-Approach Date',
 						'Nominal Miss Distance (AU)',
+						'GSE',
 						'Orbiting Body for Close-Approach',
 						]
 
@@ -134,6 +141,7 @@ def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 									'Alphelion Distance': asteriod_data_dict['orbital_data']['aphelion_distance'],
 									'Close-Approach Date': neo_close_approach_event["close_approach_date"],
 									'Nominal Miss Distance (AU)': neo_close_approach_event["miss_distance"]["astronomical"],
+									'GSE': None, #TODO
 									'Orbiting Body for Close-Approach': neo_close_approach_event["orbiting_body"],
 									})
 
