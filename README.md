@@ -57,13 +57,23 @@ We are concerned with the time the orbiting body spends above/below the xy eclip
 
 ![timing the orbit](timing_orbit.jpg)
 
-**Run Code**
+## Run Code
 
 `
-python pre_processing.py -A DEMO_KEY
+python pre_processing.py -A DEMO_KEY -P True
 `
 
-Parameters: -A [(API_KEY)](https://api.nasa.gov/index.html#apply-for-an-api-key "Get NASA API Key") (Note: Can use 'DEMO_KEY' for a test run)
+Parameters:
+
+ **-A**
+
+ [API_KEY](https://api.nasa.gov/index.html#apply-for-an-api-key "Get NASA API Key") (Note: Can use 'DEMO_KEY' for a test run)
+
+ **-P**
+
+Options: __True__ or __False__
+
+ To print details to Command Line (Default set to False)
 
 ## TODO
 1. Convert the orbital dynamics of the small body into GSE to compare with the position of low-Earth orbit satellites detecting IFEs

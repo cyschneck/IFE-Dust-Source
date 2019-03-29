@@ -9,7 +9,7 @@ import csv
 import requests
 
 ## API CALLS FOR NEO
-def neoApiByDate(api_key, start_date, end_date):
+def neoApiByDate(api_key, start_date, end_date, to_print):
 	# api call: Retrieve a list of Asteroids based on their closest approach date to Earth.
 	# Parameters: Starting date for asteroid search (YYYY-MM-DD), Ending date for asteroid search (YYYY-MM-DD)
 	''' Returns: Date, is_sentry_object, links, nasa_jpl_url, absolute_magnitude_h, 
@@ -21,15 +21,15 @@ def neoApiByDate(api_key, start_date, end_date):
 	'''
 	http_link_by_date = "https://api.nasa.gov/neo/rest/v1/feed?start_date={0}&end_date={1}&api_key={2}".format(start_date, end_date, api_key)
 	api_data = requests.get(http_link_by_date)
-	print("Date Range: {0} - {1}".format(start_date, end_date))
-	print("status code by date = {0}".format(api_data.status_code))
+	if to_print: print("Date Range: {0} - {1}".format(start_date, end_date))
+	if to_print: print("status code by date = {0}".format(api_data.status_code))
 
 	if api_data.status_code != 200:
 		# 401 (Unauthorized), 402 (Forbidden), 403 (Forbidden), 404 (Not Found)
 		print("API REQUEST NOT FOUND, exiting...")
 		exit()
 
-	start_limit = int(IsApiLimitReached(api_data, 1)) # x limit = 1000/hr (check that isn't reached)
+	start_limit = int(IsApiLimitReached(api_data, 1, to_print)) # x limit = 1000/hr (check that isn't reached)
 	if api_data.status_code == 200:
 		#print("api data encoding: {0}".format(api_data.encoding))
 		api_neo_lst = api_data.json()["near_earth_objects"]
@@ -38,23 +38,16 @@ def neoApiByDate(api_key, start_date, end_date):
 		total_calls_to_make = 0 # total api calls to make (check that it doesn't exceeded allowed)
 		for date, neo_found in api_neo_lst.iteritems():
 			total_calls_to_make += len(neo_found)
-		print("Total api calls to make = {0}".format(total_calls_to_make))
-		IsApiLimitReached(api_data, total_calls_to_make)
+		if to_print: print("Total api calls to make = {0}".format(total_calls_to_make))
+		IsApiLimitReached(api_data, total_calls_to_make, to_print)
 
 		neo_data_by_id = {}
 		for date, neo_data_lst in api_neo_lst.iteritems():
-			print(date)
+			if to_print: print(date)
 			for neo_data_dict in neo_data_lst:
-				#print("NEW OBJECT")
-				#for k, v in neo_data_dict.iteritems():
-				#	print(k)
-				#	print("\t{0}".format(v))
-				#	print("\n")
 				neo_data_by_id[neo_data_dict['neo_reference_id']] = neoApiByID(api_key, neo_data_dict['neo_reference_id'])
-			print("\n")
-			pass
 
-	print("API LIMIT REMAINING: {0}".format(start_limit - total_calls_to_make)) # print api calls remaining at the end for reference
+	if to_print: print("API LIMIT REMAINING: {0}".format(start_limit - total_calls_to_make)) # print api calls remaining at the end for reference
 	return neo_data_by_id
 
 def neoApiByID(api_key, asteriod_id):
@@ -72,7 +65,7 @@ def neoApiByID(api_key, asteriod_id):
 	'''
 	http_link_by_id = "https://api.nasa.gov/neo/rest/v1/neo/{0}?api_key={1}".format(asteriod_id, api_key)
 	api_data = requests.get(http_link_by_id)
-	#print("status code by id = {0}".format(api_data.status_code))
+	#if to_print: print("status code by id = {0}".format(api_data.status_code))
 
 	if api_data.status_code != 200:
 		# 401 (Unauthorized), 402 (Forbidden), 404 (Not Found)
@@ -80,16 +73,17 @@ def neoApiByID(api_key, asteriod_id):
 		exit()
 
 	if api_data.status_code == 200:
-		print("\tNEO BY ID = {0}".format(asteriod_id))
+		if to_print: print("\tNEO BY ID = {0}".format(asteriod_id))
 		neo_id_dict = api_data.json()
-		#for k, v in neo_id_dict.iteritems():
-		#	print(k)
-		#	print(v)
-		#	print("\n")
+		#if to_print: 
+		#	for k, v in neo_id_dict.iteritems():
+		#		print(k)
+		#		print(v)
+		#		print("\n")
 	return neo_id_dict
 
 ## TRACK API USAGE
-def IsApiLimitReached(api_data, api_call_request_cnt):
+def IsApiLimitReached(api_data, api_call_request_cnt, to_print):
 	# check that api limit isn't reached before attempting
 	# NASA API X-Ratelimit 100 api calls per hour (on a rolling basis when an hour has passed since the call was made)
 	api_calls_remaining = int(api_data.headers['X-RateLimit-Remaining'])
@@ -98,7 +92,7 @@ def IsApiLimitReached(api_data, api_call_request_cnt):
 	if api_calls_remaining < api_call_request_cnt:
 		print("API LIMIT REACHED, Cannot make {0} calls. Wait an hour to allow limit to fully reset".format(api_call_request_cnt))
 		exit()
-	print("API CALLS REMAINING: {0}".format(api_calls_remaining))
+	if to_print: print("API CALLS REMAINING: {0}".format(api_calls_remaining))
 	return api_calls_remaining
 
 ## SAVE DATA TO CSV
@@ -153,28 +147,28 @@ if __name__ == '__main__':
 	# file run: python pre_processing.py -A DEMO_KEY
 	parser = argparse.ArgumentParser(description="flag format given as: -A <api_key>")
 	parser.add_argument('-A', '-api-key', help="api key for dataset")
-	#parser.add_argument('-P', '-verbose_sentences', choices=("True", "False"), default="False", help="print sentences")
+	parser.add_argument('-P', '-verbose_sentences', choices=("True", "False"), default="False", help="print sentences")
 	args = parser.parse_args()
 	if args.A is None:
 		print("ERROR: Include api key to read\n")
 		exit()
 	else:
 		api_key = args.A
-		
 
-	#to_print = args.P
-	#to_print = True if args.P == 'True' else False # cast as true/false from input string
+	# argument to print details for the command prompt
+	to_print = args.P
+	to_print = True if args.P == 'True' else False # cast as true/false from input string
 
 	# creating directories if they do not already exist
-	if not os.path.isdir('csv_neo_features'):
-		print("creating csv_neo_features directory")
-		os.makedirs('csv_neo_features')
+	if to_print:
+		if not os.path.isdir('csv_neo_features'):
+			print("creating csv_neo_features directory")
+			os.makedirs('csv_neo_features')
 
-	print("\n")
-	#try june 19-21 of 1983
+	if to_print: print("\n")
 	start_date = '1983-06-19'
 	end_date = '1983-06-21'
-	asteriod_id_data_dict = neoApiByDate(api_key, start_date, end_date) # returns the neo by id
+	asteriod_id_data_dict = neoApiByDate(api_key, start_date, end_date, to_print) # returns the neo by id
 
 	saveNEOData(asteriod_id_data_dict, start_date, end_date) # save neo asteriod data to csv
 
