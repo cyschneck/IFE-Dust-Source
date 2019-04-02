@@ -76,5 +76,6 @@ Options: __True__ or __False__
  To print details to Command Line (Default set to False)
 
 ## TODO
-1. Convert the orbital dynamics of the small body into GSE to compare with the position of low-Earth orbit satellites detecting IFEs
+1. Strip position for ACE in J200 from Cdaweb and for Small Body from Horizons
+2. Compare with the position of low-Earth orbit satellites detecting IFEs
 

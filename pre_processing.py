@@ -1,7 +1,7 @@
 ########################################################################################################################################
 # Dust and IFE interactions
 # Objective: PRE-PROCESSING OF SMALL BODIES DATABASE DATA TYPES FOR FUTURE IDENTIFICATION
-# Date: March 2019
+# Date Started: March 2019
 ########################################################################################################################################
 import os
 from datetime import datetime
@@ -105,9 +105,10 @@ def IsApiLimitReached(api_data, api_call_request_cnt, to_print):
 	if to_print: print("API CALLS REMAINING: {0}".format(api_calls_remaining))
 	return api_calls_remaining
 
-## CONVERT TO GSE
+## CONVERT TO J200 (ECI Frame)
 def convertToGSE():
 	# Convert orbital dynamics for small bodies into GSE
+	# Strip position vectors from cdaweb for ACE and Horizon for Small Bodies
 	# Compare with the position of low-Earth orbit satellites detecting IFEs
 	return None
 
@@ -200,7 +201,7 @@ if __name__ == '__main__':
 	print(date_range)
 	widgets = ['API Calls for Dates: ', pb.Percentage(), ' ',
 				pb.Bar(marker=pb.RotatingMarker()), ' ', pb.ETA()]
-	import time
+
 	timer = pb.ProgressBar(widgets=widgets, maxval=len(date_range)).start()
 	for i in range(len(date_range)):
 		timer.update(i)
@@ -210,12 +211,4 @@ if __name__ == '__main__':
 		saveNEOData(asteriod_id_data_dict, start_date, end_date) # save neo asteriod data to csv
 	timer.finish()
 
-	'''
-	start_date = '1983-06-19'
-	end_date = '1983-06-21'
-	asteriod_id_data_dict = neoApiByDate(api_key, start_date, end_date, to_print) # returns the neo by id
-
-	saveNEOData(asteriod_id_data_dict, start_date, end_date) # save neo asteriod data to csv
-
-	'''
 	print("\nran for for {0}\n".format(datetime.now() - start_time))
