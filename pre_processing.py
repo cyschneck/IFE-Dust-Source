@@ -10,7 +10,7 @@ import requests
 
 ## API CALLS FOR NEO
 def neoApiByDate(api_key, start_date, end_date, to_print):
-	# api call: Retrieve a list of Asteroids based on their closest approach date to Earth.
+	# api call: Retrieve a list of Asteroids based on their closest approach date to Earth
 	# Parameters: Starting date for asteroid search (YYYY-MM-DD), Ending date for asteroid search (YYYY-MM-DD)
 	''' Returns: Date, is_sentry_object, links, nasa_jpl_url, absolute_magnitude_h, 
 		estimated_diameter (max, min): feet, miles, meters, kilometers,
@@ -99,12 +99,11 @@ def IsApiLimitReached(api_data, api_call_request_cnt, to_print):
 def convertToGSE():
 	# Convert orbital dynamics for small bodies into GSE 
 	# Compare with the position of low-Earth orbit satellites detecting IFEs
-	pass
+	return None
 
 ## SAVE DATA TO CSV
 def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 	# save data from api call to csv"
-	#eccentricity, Semi-major axis, inclination,  perihelion argument, perihelion time
 	csv_filename = 'neo_asteriod_features_from_{0}_to_{1}.csv'.format(start_date.replace('-', '_'), end_date.replace('-', '_'))
 	with open("{0}/{1}".format("csv_neo_features", csv_filename), mode='w') as csv_file:
 		api_fields = ["Name",
@@ -119,7 +118,7 @@ def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 						"Alphelion Distance",
 						'Close-Approach Date',
 						'Nominal Miss Distance (AU)',
-						'GSE',
+						'GSE (AU)',
 						'Orbiting Body for Close-Approach',
 						]
 
@@ -142,21 +141,22 @@ def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 										'Alphelion Distance': asteriod_data_dict['orbital_data']['aphelion_distance'],
 										'Close-Approach Date': neo_close_approach_event["close_approach_date"],
 										'Nominal Miss Distance (AU)': neo_close_approach_event["miss_distance"]["astronomical"],
-										'GSE': None, #TODO
+										'GSE (AU)': convertToGSE(), #TODO
 										'Orbiting Body for Close-Approach': neo_close_approach_event["orbiting_body"],
 										})
 
 	print("\nSAVED: {0}".format(csv_filename))
-	return csv_filename
 
 if __name__ == '__main__':
 	start_time = datetime.now()
 
 	import argparse
-	# file run: python pre_processing.py -A DEMO_KEY
+	# file run: python pre_processing.py -A DEMO_KEY -P True
 	parser = argparse.ArgumentParser(description="flag format given as: -A <api_key>")
 	parser.add_argument('-A', '-api-key', help="api key for dataset")
 	parser.add_argument('-P', '-verbose_sentences', choices=("True", "False"), default="False", help="print sentences")
+	#parser.add_argument('-S', '-start-date', help="start date for asteriod api search")
+	#arser.add_argument('-E', '-end-date', help="end date for asteriod api search")
 	args = parser.parse_args()
 	if args.A is None:
 		print("ERROR: Include api key to read\n")
