@@ -95,9 +95,9 @@ def IsApiLimitReached(api_data, api_call_request_cnt, to_print):
 	if to_print: print("API CALLS REMAINING: {0}".format(api_calls_remaining))
 	return api_calls_remaining
 
-## CONVERT TO GSE
+## CONVERT TO J200 (ECI Frame)
 def convertToGSE():
-	# Convert orbital dynamics for small bodies into GSE 
+        # Strip position vectors from cdaweb for ACE and Horizon for Small Bodies
 	# Compare with the position of low-Earth orbit satellites detecting IFEs
 	return None
 
