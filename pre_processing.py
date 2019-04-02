@@ -7,12 +7,22 @@ import os
 from datetime import datetime
 import csv
 import requests
+from subprocess import check_output
+import progressbar as pb
+
+## GET DATE RANGE
+def dateRange(date_range_file):
+	# date range from file
+	#TODO: READ TEXT FILE...
+	date_range_file='1983-06-19,1983-06-21' #TODO: temp, to replace with file
+
+	return [date_range_file.split(',')]
 
 ## API CALLS FOR NEO
 def neoApiByDate(api_key, start_date, end_date, to_print):
 	# api call: Retrieve a list of Asteroids based on their closest approach date to Earth
 	# Parameters: Starting date for asteroid search (YYYY-MM-DD), Ending date for asteroid search (YYYY-MM-DD)
-	''' Returns: Date, is_sentry_object, links, nasa_jpl_url, absolute_magnitude_h, 
+	''' Returns: Date, is_sentry_object, links, nasa_jpl_url, absolute_magnitude_h,
 		estimated_diameter (max, min): feet, miles, meters, kilometers,
 		close_approach_data (list of all approaches): miss distance (astronmical, miles, lunar, kilometers),
 		orbiting_body (i.e. Earth, Venus, etc...),
@@ -75,7 +85,7 @@ def neoApiByID(api_key, asteriod_id):
 	if api_data.status_code == 200:
 		if to_print: print("\tNEO BY ID = {0}".format(asteriod_id))
 		neo_id_dict = api_data.json()
-		#if to_print: 
+		#if to_print:
 		#	for k, v in neo_id_dict.iteritems():
 		#		print(k)
 		#		print(v)
@@ -88,7 +98,7 @@ def IsApiLimitReached(api_data, api_call_request_cnt, to_print):
 	# NASA API X-Ratelimit 100 api calls per hour (on a rolling basis when an hour has passed since the call was made)
 	api_calls_remaining = int(api_data.headers['X-RateLimit-Remaining'])
 	#print("{0} < {1} = {2}".format(api_calls_remaining, api_call_request_cnt, api_calls_remaining < api_call_request_cnt))
-	
+
 	if api_calls_remaining < api_call_request_cnt:
 		print("API LIMIT REACHED, Cannot make {0} calls. Wait an hour to allow limit to fully reset".format(api_call_request_cnt))
 		exit()
@@ -97,7 +107,7 @@ def IsApiLimitReached(api_data, api_call_request_cnt, to_print):
 
 ## CONVERT TO GSE
 def convertToGSE():
-	# Convert orbital dynamics for small bodies into GSE 
+	# Convert orbital dynamics for small bodies into GSE
 	# Compare with the position of low-Earth orbit satellites detecting IFEs
 	return None
 
@@ -127,7 +137,7 @@ def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 
 		for asteriod_id, asteriod_data_dict in api_asteriod_id_dict.iteritems():
 			for neo_close_approach_event in asteriod_data_dict['close_approach_data']:
-				if float(neo_close_approach_event["miss_distance"]["astronomical"]) <= 0.1: # filter on neo approaches for Nominal Miss Distance <= 1/10 (0.1) AU 
+				if float(neo_close_approach_event["miss_distance"]["astronomical"]) <= 0.1: # filter on neo approaches for Nominal Miss Distance <= 1/10 (0.1) AU
 					if neo_close_approach_event["orbiting_body"] == "Earth": # filter on neo approaches for Earth
 						writer.writerow({'Name': asteriod_data_dict['name'],
 										'Designation': asteriod_data_dict['designation'],
@@ -155,14 +165,22 @@ if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description="flag format given as: -A <api_key>")
 	parser.add_argument('-A', '-api-key', help="api key for dataset")
 	parser.add_argument('-P', '-verbose_sentences', choices=("True", "False"), default="False", help="print sentences")
-	#parser.add_argument('-S', '-start-date', help="start date for asteriod api search")
-	#arser.add_argument('-E', '-end-date', help="end date for asteriod api search")
+	parser.add_argument('-D', '-date-file', help="file of dates")
 	args = parser.parse_args()
+
 	if args.A is None:
 		print("ERROR: Include api key to read\n")
 		exit()
 	else:
 		api_key = args.A
+
+	# get range of dates from file to run and produce multiple files
+	if args.D is None:
+		print("ERROR: Include date file for date ranges\n")
+		exit()
+	else:
+		date_range_file = args.D
+	range_of_dates_lst = dateRange(date_range_file)
 
 	# argument to print details for the command prompt
 	to_print = args.P
@@ -175,10 +193,29 @@ if __name__ == '__main__':
 			os.makedirs('csv_neo_features')
 
 	if to_print: print("\n")
+	if to_print: print(range_of_dates_lst)
+
+	# run API calls for each date range in file (with progress bar)
+	date_range = dateRange(date_range_file) #TODO: rows of file for each date range
+	print(date_range)
+	widgets = ['API Calls for Dates: ', pb.Percentage(), ' ',
+				pb.Bar(marker=pb.RotatingMarker()), ' ', pb.ETA()]
+	import time
+	timer = pb.ProgressBar(widgets=widgets, maxval=len(date_range)).start()
+	for i in range(len(date_range)):
+		timer.update(i)
+		start_date = date_range[i][0]
+		end_date = date_range[i][1]
+		asteriod_id_data_dict = neoApiByDate(api_key, start_date, end_date, to_print) # returns the neo by id
+		saveNEOData(asteriod_id_data_dict, start_date, end_date) # save neo asteriod data to csv
+	timer.finish()
+
+	'''
 	start_date = '1983-06-19'
 	end_date = '1983-06-21'
 	asteriod_id_data_dict = neoApiByDate(api_key, start_date, end_date, to_print) # returns the neo by id
 
 	saveNEOData(asteriod_id_data_dict, start_date, end_date) # save neo asteriod data to csv
 
+	'''
 	print("\nran for for {0}\n".format(datetime.now() - start_time))
