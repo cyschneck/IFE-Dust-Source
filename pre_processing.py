@@ -1,7 +1,7 @@
 ########################################################################################################################################
 # Dust and IFE interactions
 # Objective: PRE-PROCESSING OF SMALL BODIES DATABASE DATA TYPES FOR FUTURE IDENTIFICATION
-# Date: March 2019
+# Date Started: March 2019
 ########################################################################################################################################
 import os
 from datetime import datetime
