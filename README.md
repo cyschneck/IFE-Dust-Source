@@ -50,7 +50,7 @@ IFEs have a short time before they have been accelerated up to solar wind veloci
 
 **Simplifying Assumptions**
 
-1. The radius of all IFEs is assumed to be the average radial scale length of IFEs (for ACE this is around 1.7e6 km)
+1. The radius of all IFEs is assumed to be the average radial scale length of IFEs (for ACE this is around 1.7e+06 km)
 2. All relevant small bodies are listed in the NASA Small Body JPL collection
 
 **Orbital Timing**
