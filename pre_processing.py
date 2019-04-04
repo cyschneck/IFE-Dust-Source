@@ -5,6 +5,8 @@
 ########################################################################################################################################
 import os
 from datetime import datetime
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 import csv
 import requests
 from subprocess import check_output
@@ -12,11 +14,22 @@ import progressbar as pb
 
 ## GET DATE RANGE
 def dateRange(date_range_file):
-	# date range from file
-	#TODO: READ TEXT FILE...
-	date_range_file='1983-06-19,1983-06-21' #TODO: temp, to replace with file
-
-	return [date_range_file.split(',')]
+	# date range from file and returns a list of date ranges increments 
+	# Returns examples: [['04/01/2011', '04/02/2011'], ['12/31/2011', '01/01/2012']]
+	date_range_lst = []
+	with open(date_range_file) as csv_file:
+		csv_reader = csv.reader(csv_file, delimiter=',')
+		row_num = 0
+		for row in csv_reader:
+			if row[0] != '': # ignore empty rows
+				row_num += 1
+				if row_num == 2 and row[0] == 'Date': # row for date values
+					for start_date in row[1:]:
+						start_date = datetime.strptime(start_date,"%m/%d/%Y")
+						end_date = start_date + relativedelta(days=1) # increment date counter by one day
+						date_range_lst.append([start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d')])
+	# oljato example: date_range_lst = [['1983-06-19', '1983-06-21']]
+	return date_range_lst
 
 ## API CALLS FOR NEO
 def neoApiByDate(api_key, start_date, end_date, to_print):
@@ -118,7 +131,6 @@ def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 	csv_filename = 'neo_asteriod_features_from_{0}_to_{1}.csv'.format(start_date.replace('-', '_'), end_date.replace('-', '_'))
 	with open("{0}/{1}".format("csv_neo_features", csv_filename), mode='w') as csv_file:
 		api_fields = ["Name",
-						'Designation',
 						"neo_reference_id",
 						"Eccentricity",
 						"Semi-Major Axis",
@@ -141,7 +153,6 @@ def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 				if float(neo_close_approach_event["miss_distance"]["astronomical"]) <= 0.1: # filter on neo approaches for Nominal Miss Distance <= 1/10 (0.1) AU
 					if neo_close_approach_event["orbiting_body"] == "Earth": # filter on neo approaches for Earth
 						writer.writerow({'Name': asteriod_data_dict['name'],
-										'Designation': asteriod_data_dict['designation'],
 										'neo_reference_id': asteriod_data_dict['id'],
 										'Eccentricity': asteriod_data_dict['orbital_data']['eccentricity'],
 										'Semi-Major Axis': asteriod_data_dict['orbital_data']['semi_major_axis'],
@@ -181,7 +192,6 @@ if __name__ == '__main__':
 		exit()
 	else:
 		date_range_file = args.D
-	range_of_dates_lst = dateRange(date_range_file)
 
 	# argument to print details for the command prompt
 	to_print = args.P
@@ -194,11 +204,10 @@ if __name__ == '__main__':
 			os.makedirs('csv_neo_features')
 
 	if to_print: print("\n")
-	if to_print: print(range_of_dates_lst)
 
 	# run API calls for each date range in file (with progress bar)
 	date_range = dateRange(date_range_file) #TODO: rows of file for each date range
-	print(date_range)
+
 	widgets = ['API Calls for Dates: ', pb.Percentage(), ' ',
 				pb.Bar(marker=pb.RotatingMarker()), ' ', pb.ETA()]
 
