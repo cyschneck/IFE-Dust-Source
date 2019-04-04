@@ -45,10 +45,12 @@ Data-set: All the data is from the [NASA JPL Asteroid team](http://neo.jpl.nasa.
 * q = perihelion distance (Au) describes the point in the orbit closest to the sun
 
 **Restrictions**
+
 IFEs have a short time before they have been accelerated up to solar wind velocity and dissapear. Therefore, we will only consider events whose passage into the orbital range of interest occur within 1/10 of an Au of Earth.
 
 **Simplifying Assumptions**
-1. The radius of all IFEs is assumed to be the average radial size of IFEs
+
+1. The radius of all IFEs is assumed to be the average radial scale length of IFEs (for ACE this is around 1.7e+06 km)
 2. All relevant small bodies are listed in the NASA Small Body JPL collection
 
 **Orbital Timing**
