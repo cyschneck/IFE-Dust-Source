@@ -62,7 +62,7 @@ We are concerned with the time the orbiting body spends above/below the xy eclip
 ## Run Code
 
 `
-python pre_processing.py -A DEMO_KEY -P True
+python pre_processing.py -A DEMO_KEY -P True -D Date-File.csv
 `
 
 Parameters:
@@ -77,7 +77,10 @@ Options: __True__ or __False__
 
  To print details to Command Line (Default set to False)
 
+ **-D**
+
+ CSV date file for identified IFEs
+
 ## TODO
 1. Strip position for ACE in J200 from Cdaweb and for Small Body from Horizons
 2. Compare with the position of low-Earth orbit satellites detecting IFEs
-

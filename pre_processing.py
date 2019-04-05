@@ -12,10 +12,10 @@ import requests
 from subprocess import check_output
 import progressbar as pb
 
-## GET DATE RANGE
+## GET DATE RANGE FROM DATA CSV
 def dateRange(date_range_file):
 	# date range from file and returns a list of date ranges increments 
-	# Returns examples: [['04/01/2011', '04/02/2011'], ['12/31/2011', '01/01/2012']]
+	# Returns list of date ranges (incremented one day): [['04/01/2011', '04/02/2011'], ['12/31/2011', '01/01/2012']]
 	date_range_lst = []
 	with open(date_range_file) as csv_file:
 		csv_reader = csv.reader(csv_file, delimiter=',')
@@ -28,7 +28,7 @@ def dateRange(date_range_file):
 						start_date = datetime.strptime(start_date,"%m/%d/%Y")
 						end_date = start_date + relativedelta(days=1) # increment date counter by one day
 						date_range_lst.append([start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d')])
-	# oljato example: date_range_lst = [['1983-06-19', '1983-06-21']]
+	#date_range_lst = [['1983-06-19', '1983-06-21']] # oljato example
 	return date_range_lst
 
 ## API CALLS FOR NEO
@@ -173,7 +173,7 @@ if __name__ == '__main__':
 	start_time = datetime.now()
 
 	import argparse
-	# file run: python pre_processing.py -A DEMO_KEY -P True
+	# file run: python pre_processing.py -A DEMO_KEY -P True -D ACE_IFEs_example.csv
 	parser = argparse.ArgumentParser(description="flag format given as: -A <api_key>")
 	parser.add_argument('-A', '-api-key', help="api key for dataset")
 	parser.add_argument('-P', '-verbose_sentences', choices=("True", "False"), default="False", help="print sentences")
@@ -206,7 +206,7 @@ if __name__ == '__main__':
 	if to_print: print("\n")
 
 	# run API calls for each date range in file (with progress bar)
-	date_range = dateRange(date_range_file) #TODO: rows of file for each date range
+	date_range = dateRange(date_range_file)
 
 	widgets = ['API Calls for Dates: ', pb.Percentage(), ' ',
 				pb.Bar(marker=pb.RotatingMarker()), ' ', pb.ETA()]
