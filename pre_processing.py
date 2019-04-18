@@ -169,6 +169,22 @@ def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 
 	print("\nSAVED: {0}".format(csv_filename))
 
+def saveECIData():
+	# TODO: eci data description
+	csv_filename = 'DATETIME_ACE.csv'
+	with open("{0}/{1}".format("csv_eci_data", csv_filename), mode='w') as csv_file:
+		eci_data = ['Date',
+					'Time',
+					'X',
+					'Y',
+					'Z',
+					]
+
+		writer = csv.DictWriter(csv_file, fieldnames=eci_data)
+		writer.writeheader()
+
+	print("\nSAVED: {0}".format(csv_filename))
+
 if __name__ == '__main__':
 	start_time = datetime.now()
 
@@ -198,11 +214,14 @@ if __name__ == '__main__':
 	to_print = True if args.P == 'True' else False # cast as true/false from input string
 
 	# creating directories if they do not already exist
-	if to_print:
-		if not os.path.isdir('csv_neo_features'):
-			print("creating csv_neo_features directory")
-			os.makedirs('csv_neo_features')
-
+	if not os.path.isdir('csv_neo_features'):
+		if to_print: print("creating csv_neo_features directory")
+		os.makedirs('csv_neo_features')
+	
+	if not os.path.isdir('csv_eci_data'):
+		if to_print: print("creating csv_eci_data directory")
+		os.makedirs('csv_eci_data')
+	
 	if to_print: print("\n")
 
 	# run API calls for each date range in file (with progress bar)
@@ -218,6 +237,8 @@ if __name__ == '__main__':
 		end_date = date_range[i][1]
 		asteriod_id_data_dict = neoApiByDate(api_key, start_date, end_date, to_print) # returns the neo by id
 		saveNEOData(asteriod_id_data_dict, start_date, end_date) # save neo asteriod data to csv
+		saveECIData() # TODO: eci data
+		print("\n")
 	timer.finish()
 
 	print("\nran for for {0}\n".format(datetime.now() - start_time))
