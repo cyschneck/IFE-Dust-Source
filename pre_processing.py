@@ -67,7 +67,9 @@ def neoApiByDate(api_key, start_date, end_date, to_print):
 		neo_data_by_id = {}
 		for date, neo_data_lst in api_neo_lst.iteritems():
 			if to_print: print(date)
+			#if to_print: print(neo_data_lst)
 			for neo_data_dict in neo_data_lst:
+				# use neo_reference_id for an asteriod to get asteriod feature data for that specific asteriod
 				neo_data_by_id[neo_data_dict['neo_reference_id']] = neoApiByID(api_key, neo_data_dict['neo_reference_id'])
 
 	if to_print: print("API LIMIT REMAINING: {0}".format(start_limit - total_calls_to_make)) # print api calls remaining at the end for reference
@@ -84,7 +86,7 @@ def neoApiByID(api_key, asteriod_id):
 		epoch_osculation, mean_motion, jupiter_tisserand_invariant, orbit_determination_date, perihelion_time,
 		eccentricity, perihelion_argument, minimum_orbit_intersection, semi_major_axis, perihelion_distance
 	estimated_diameter (max, min): feet, miles, meters, kilometers,
-	close_approach_data (list of all approaches): miss distance (astronmical, miles, lunar, kilometers),
+	close_approach_data (list of all approaches): miss distance (astronmical, miles, lunar, kilometers)
 	'''
 	http_link_by_id = "https://api.nasa.gov/neo/rest/v1/neo/{0}?api_key={1}".format(asteriod_id, api_key)
 	api_data = requests.get(http_link_by_id)
@@ -151,7 +153,7 @@ def saveNEOData(api_asteriod_id_dict, start_date, end_date):
 		for asteriod_id, asteriod_data_dict in api_asteriod_id_dict.iteritems():
 			for neo_close_approach_event in asteriod_data_dict['close_approach_data']:
 				if float(neo_close_approach_event["miss_distance"]["astronomical"]) <= 0.1: # filter on neo approaches for Nominal Miss Distance <= 1/10 (0.1) AU
-					if neo_close_approach_event["orbiting_body"] == "Earth": # filter on neo approaches for Earth
+					if neo_close_approach_event["orbiting_body"] == "Earth": # filter on neo approaches for approaches to 'Earth'
 						writer.writerow({'Name': asteriod_data_dict['name'],
 										'neo_reference_id': asteriod_data_dict['id'],
 										'Eccentricity': asteriod_data_dict['orbital_data']['eccentricity'],
@@ -195,6 +197,10 @@ if __name__ == '__main__':
 	parser.add_argument('-P', '-verbose_sentences', choices=("True", "False"), default="False", help="print sentences")
 	parser.add_argument('-D', '-date-file', help="file of dates")
 	args = parser.parse_args()
+	
+	## TERMINOLOGY:
+	# NEO: Near Earth Object
+	# ECI: Earth Centered Inertial Coordinate System
 
 	if args.A is None:
 		print("ERROR: Include api key to read\n")
@@ -214,10 +220,12 @@ if __name__ == '__main__':
 	to_print = True if args.P == 'True' else False # cast as true/false from input string
 
 	# creating directories if they do not already exist
+	# Directory: For each date, all the NEO and their associated features
 	if not os.path.isdir('csv_neo_features'):
 		if to_print: print("creating csv_neo_features directory")
 		os.makedirs('csv_neo_features')
-	
+
+	# Directory: TODO
 	if not os.path.isdir('csv_eci_data'):
 		if to_print: print("creating csv_eci_data directory")
 		os.makedirs('csv_eci_data')
@@ -235,7 +243,7 @@ if __name__ == '__main__':
 		timer.update(i)
 		start_date = date_range[i][0]
 		end_date = date_range[i][1]
-		asteriod_id_data_dict = neoApiByDate(api_key, start_date, end_date, to_print) # returns the neo by id
+		asteriod_id_data_dict = neoApiByDate(api_key, start_date, end_date, to_print) # returns the neo data by asteriod id
 		saveNEOData(asteriod_id_data_dict, start_date, end_date) # save neo asteriod data to csv
 		saveECIData() # TODO: eci data
 		print("\n")
